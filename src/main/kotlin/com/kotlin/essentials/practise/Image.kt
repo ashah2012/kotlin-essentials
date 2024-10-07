@@ -11,6 +11,12 @@ class Image(private val bufferedImage: BufferedImage) {
     val width = bufferedImage.width
     val height = bufferedImage.height
 
+    fun getColor(x: Int, y: Int): Color =
+        Color.fromHex(bufferedImage.getRGB(x, y))
+
+    fun setColor(x: Int, y: Int, color: Color) =
+        bufferedImage.setRGB(x, y, color.toInt())
+
     fun save(path: String) = ImageIO.write(bufferedImage, "jpg", File(path))
 
     fun saveResource(path: String) = save("src/main/resources/$path")

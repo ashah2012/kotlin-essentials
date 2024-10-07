@@ -71,8 +71,9 @@ object App {
                 "exit" -> exitProcess(0)
                 else -> {
                     val transformations = Transformations.parse(command)
-                    val processedImage = transformations.process(imagePanel.getImage())
+                    val processedImage = transformations(imagePanel.getImage())
                     imagePanel.replaceImage(processedImage)
+                    frame.pack()
                 }
             }
         }

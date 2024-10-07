@@ -3,7 +3,7 @@ package com.kotlin.essentials.practise
 import java.io.IOException
 
 interface Transformations {
-    fun process(image: Image): Image
+    operator fun invoke(image: Image): Image
 
     companion object{
         fun parse(args: String) : Transformations {
@@ -40,21 +40,43 @@ interface Transformations {
     }
 }
 
-class Crop(x: Int, y:Int, w: Int, h:Int) : Transformations {
-    override fun process(image: Image): Image {
-        println("Cropping the image")
-        TODO("Not yet implemented")
-    }
+class Crop(private val x: Int, private val y:Int, private val w: Int, private val h:Int) : Transformations {
+    override fun invoke(image: Image): Image =
+        try {
+            image.crop(x, y, w, h)!!
+        } catch (e: Exception){
+            println("Error: Coordinates are out of bounds. Max coordinates: ${image.width} X ${image.height}")
+            image
+        }
+
 }
 
-class Blend(fg: Image, blendMode: BlendMode) : Transformations {
-    override fun process(image: Image): Image {
-        println("Blending the image")
-        TODO("Not yet implemented")
+class Blend(val fg: Image, val blendMode: BlendMode) : Transformations {
+    override fun invoke(bg: Image): Image {
+        if (fg.width != bg.width || fg.height != bg.height) {
+            println("Error: Images dont have same sizes")
+            return bg
+        }
+        val width = fg.width
+        val height = fg.height
+        val result = Image.black(width, height)
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                result.setColor(
+                    x,
+                    y,
+                    blendMode.combine(
+                        fg.getColor(x, y),
+                        bg.getColor(x, y)
+                    ))
+            }
+        }
+        return result
+
     }
 }
 class Noop : Transformations {
-    override fun process(image: Image): Image {
+    override fun invoke(image: Image): Image {
         return image
     }
 }
