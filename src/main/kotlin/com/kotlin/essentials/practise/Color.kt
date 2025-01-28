@@ -59,7 +59,7 @@ fun main(){
    // green.draw(20, 20, "src/main/resources/green.jpg")
 
     //val magenta = Color(255, 0, 255)
-    //magenta.draw(20, 20, "src/main/resources/magenta.jpg")
+    // magenta.draw(20, 20, "src/main/resources/magenta.jpg")
 
     Color.BLUE.draw(920, 608, "src/main/resources/Color.BLUE.jpg")
     //Color.fromHex(0xEDEDED).draw(20, 20, "src/main/resources/ed.jpg")

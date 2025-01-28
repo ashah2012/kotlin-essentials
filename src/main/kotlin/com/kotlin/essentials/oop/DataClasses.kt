@@ -25,7 +25,7 @@ object DataClasses {
         val bucharest = City("Bucharest", "Romania", 20000)
         val bucharestV2 = City("Bucharest", "Romania", 20000)
         val grownBucharest = bucharest.copy(population = 25000)
-
+        
         // equals
         println(bucharest == bucharestV2)
         // copy method

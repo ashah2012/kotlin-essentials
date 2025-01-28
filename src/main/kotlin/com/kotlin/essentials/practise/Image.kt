@@ -21,6 +21,27 @@ class Image(private val bufferedImage: BufferedImage) {
 
     fun saveResource(path: String) = save("src/main/resources/$path")
 
+    fun window(xc: Int, yc: Int, width: Int, height: Int): Window {
+        val offsetX = (width - 1) / 2
+        val offsetY = (height - 1) / 2
+        val horizCoords = ((xc - offsetX) .. (xc + offsetX))
+            .map { x ->
+                if (x <= 0) 0
+                else if (x >= this.width)  this.width - 1
+                else x
+            }
+
+        val vertCoords = ((yc - offsetY) .. (yc + offsetY))
+            .map { y ->
+                if (y <= 0) 0
+                else if (y >= this.height)  this.height - 1
+                else y
+            }
+        val colors = vertCoords.flatMap { y ->
+            horizCoords.map { x -> getColor(x, y) }
+        }
+        return Window(width, height, colors)
+    }
 
     /*
        Crop Image
@@ -49,9 +70,20 @@ class Image(private val bufferedImage: BufferedImage) {
             return com.kotlin.essentials.practise.Image(buffImage)
         }
 
+        fun fromColors(width: Int, height: Int, colors: List<Color>): Image {
+            val buffImage = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+            val pixels = colors.map { it.toInt() }.toIntArray()
+            buffImage.setRGB(0, 0, width, height, pixels, 0, width)
+            return com.kotlin.essentials.practise.Image(buffImage)
+        }
+
+
+
         fun load(path: String) = Image(ImageIO.read(File(path)))
 
         fun loadResource(path: String) = load("src/main/resources/$path")
+
+
     }
 
     fun drawImage(g: Graphics) {
